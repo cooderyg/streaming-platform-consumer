@@ -1,0 +1,42 @@
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { User } from './user.entity';
+
+export enum PAYMENTSTATUS {
+  PAYMENT = 'PAYMENT',
+  CANCEL = 'CANCEL',
+}
+
+@Entity()
+export class Payment {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  amount: number;
+
+  @Column()
+  impUid: string;
+
+  @Column({ default: PAYMENTSTATUS.PAYMENT })
+  status: PAYMENTSTATUS;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.payments, { onDelete: 'CASCADE' })
+  user: User;
+}
